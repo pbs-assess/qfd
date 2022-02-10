@@ -1,0 +1,298 @@
+---
+title: Surplus production
+output: rmarkdown::github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+Production functions:
+
+```{r}
+fletcher <- function(B, Binf, m) {
+  (4 * m) / Binf * (1 - B / Binf) * B
+}
+B <- 1:100
+plot(B, sapply(1:100, function(x) fletcher(x, 100, 60)), ylab = "Production rate")
+
+schaefer <- function(B, Binf, r) {
+  r * (1 - B / Binf) * B
+}
+B <- seq(0, 100, length.out = 1000)
+
+# find matching r:
+get_r <- function(m, Binf) (4 * m) / Binf
+get_r(60, 100)
+
+Pdot <- sapply(B, function(x) schaefer(x, 100, 2.4))
+plot(B, Pdot, type = "l", ylim = c(-10, max(Pdot)), ylab = "Rate (1/t)", xlab = "B (biomass)")
+abline(h = 0)
+abline(v = 100 / 2)
+
+# Fm <- (2 * 60) / 100 # after eq 2.8c
+# Fm
+
+F <- 0.6
+Ydot <- F * B
+lines(B, Ydot, col = "blue")
+
+Bstar <- B[min(which(Pdot < Ydot))]
+Pdot_star <- Pdot[min(which(Pdot < Ydot))]
+Fstar <- Pdot_star / Bstar # 2.4b
+Fstar
+
+Ydot_star <- Fstar * B
+Bdot <- Pdot - Ydot_star
+lines(B, Bdot, col = "red")
+abline(v = Bstar)
+
+legend("topleft",
+  col = c("black", "red", "blue"),
+  legend = c("Pdot (production rate)", "Ydot (yield rate)", "Bdot (biomass rate)"),
+  lty = c(1, 1, 1)
+)
+```
+
+Simulate from a Schaefer surplus production model:
+
+```{r, fig.asp=1.2}
+set.seed(1)
+sim_schaefer <- function(K, r, q, sigma, N, C) {
+  B <- numeric(N)
+  U <- numeric(N)
+  B[1] <- K
+  U[1] <- q * B[1]
+  for (i in 2:N) {
+    B[i] <- B[i - 1] + r * B[i - 1] * (1 - (B[i - 1] / K)) - C[i - 1]
+    U[i] <- q * B[i]
+  }
+  index <- exp(log(U) + rnorm(N, -(sigma^2) / 2, sigma))
+  list(index = index, catch = C, B = B)
+}
+
+catches <- c(seq(0, 96, length.out = 50), seq(96, 0, length.out = 50))
+sim_dat <- sim_schaefer(K = 1000, r = 0.3, q = 0.1, sigma = 0.2, N = length(catches), C = catches)
+par(mfrow = c(3, 1))
+plot(sim_dat$index, type = "o")
+plot(sim_dat$catch, type = "o")
+plot(sim_dat$B, type = "o")
+```
+
+A function to return the negative log likelihood or predictions:
+
+```{r}
+sp_nll <- function(par, dat, return_predictions = FALSE) {
+  N <- dat$N
+  catch <- dat$catch
+  Uobs <- dat$Uobs
+  
+  K <- exp(par["log_K"])
+  r <- exp(par["log_r"])
+  q <- exp(par["log_q"])
+  sigma <- exp(par["log_sigma"])
+  
+  B <- numeric(N)
+  U <- numeric(N)
+  B[1] <- dat$initial_depletion * K
+  for (i in 2:N) {
+    B[i] <- B[i - 1] + r * B[i - 1] * (1 - (B[i - 1] / K)) - catch[i - 1]
+  }
+  U <- q * B # vectors
+  U[U < 0.0001] <- 0.0001
+  
+  nll <- 0
+  # # prior on r:
+  # nll <- -dnorm(log(r), log(0.3), sd = 0.3, log = TRUE)
+  
+  # # prior on K:
+  # nll <- nll - dnorm(log(K), log(1000), sd = 0.1, log = TRUE)
+  
+  # observation likelihood on index:
+  nll <- nll - sum(dnorm(log(U), log(Uobs) - (sigma^2) / 2, sd = sigma, log = TRUE))
+  
+  if (!return_predictions) {
+    return(nll)
+  } else {
+    return(list(U = U, B = B))
+  }
+}
+```
+
+```{r}
+# create input data:
+dat <- list()
+dat$catch <- sim_dat$catch
+dat$Uobs <- sim_dat$index
+dat$N <- length(sim_dat$catch)
+dat$initial_depletion <- 1
+
+# initial values:
+pars <- c(log_K = log(1000), log_r = log(0.3), log_q = log(0.1), log_sigma = log(0.2))
+
+# test it:
+sp_nll(pars, dat = dat)
+
+# fit it:
+fit <- nlminb(pars, sp_nll, control = list(eval.max = 1000, iter.max = 1000), dat = dat)
+
+par_hat <- unname(exp(fit$par))
+names(par_hat) <- gsub("log_", "", names(pars))
+round(par_hat, 2)
+
+est <- sp_nll(fit$par, dat = dat, return_predictions = TRUE)
+par(mfrow = c(2, 1))
+plot(est$U, type = "l", ylab = "Index", xlab = "Year")
+points(sim_dat$index)
+plot(est$B, type = "l", ylab = "Biomass", xlab = "Year")
+lines(sim_dat$B, lty = 2)
+```
+
+That was a "two-way trip" with moderately strong fishing, which is quite informative. Try others.
+
+First, make function to do the fitting and plotting:
+
+```{r}
+fit_sp <- function(catches, K = 1000, r = 0.3, q = 0.1, sigma = 0.2, title = "") {
+  sim_dat <- sim_schaefer(K = K, r = r, q = q, sigma = sigma, N = length(catches), C = catches)
+  cat("True pars: K = ", K, ", r = ", r, ", q =", q, ", sigma = ", sigma, "\n", sep = "")
+  par(mfrow = c(3, 1))
+  plot(sim_dat$catch, type = "o", ylab = "Catch", xlab = "Year", main = title)
+  
+  dat <- list()
+  dat$catch <- sim_dat$catch
+  dat$Uobs <- sim_dat$index
+  dat$N <- length(sim_dat$catch)
+  dat$initial_depletion <- 1
+  
+  pars <- c(log_K = log(K), log_r = log(r), log_q = log(q), log_sigma = log(sigma))
+  fit <- nlminb(pars, sp_nll, control = list(eval.max = 2000, iter.max = 2000), dat = dat)
+  
+  par_hat <- unname(exp(fit$par))
+  names(par_hat) <- gsub("log_", "", names(pars))
+  cat("Estimated pars:\n")
+  print(round(par_hat, 2))
+  
+  est <- sp_nll(fit$par, dat = dat, return_predictions = TRUE)
+  plot(est$U, type = "l", ylab = "Index", xlab = "Year", ylim = range(est$U, sim_dat$index))
+  points(sim_dat$index)
+  plot(est$B, type = "l", ylab = "Biomass", xlab = "Year", ylim = range(c(est$B, sim_dat$B)))
+  legend("topleft", legend = c("True", "Estimated"), lty = c(2, 1))
+  lines(sim_dat$B, lty = 2)
+}
+```
+
+Two-way trip:
+
+```{r, fig.asp=1.3}
+catches <- c(seq(0, 96, length.out = 50), seq(96, 0, length.out = 50))
+fit_sp(catches, title = "One-way trip")
+fit_sp(catches, title = "One-way trip")
+```
+
+Lightly fished:
+
+```{r, fig.asp=1.3}
+set.seed(123)
+catches <- c(seq(0, 12, length.out = 50), seq(12, 0, length.out = 50))
+fit_sp(catches, title = "Lightly fished")
+fit_sp(catches, title = "Lightly fished")
+fit_sp(catches, title = "Lightly fished")
+```
+
+One-way trip:
+
+```{r, fig.asp=1.3}
+catches <- c(seq(0, 95, length.out = 100))
+fit_sp(catches, title = "One-way trip")
+fit_sp(catches, title = "One-way trip")
+```
+
+Initially fished hard:
+
+```{r, fig.asp=1.3}
+catches <- c(seq(97, 0, length.out = 100))
+fit_sp(catches, title = "Initially fished hard")
+fit_sp(catches, title = "Initially fished hard")
+```
+
+Roller coaster:
+
+```{r, fig.asp=1.3}
+catches <- sin(2 * pi * seq(-1, 1, length.out = 100)) * 20 + 70
+fit_sp(catches, title = "Roller coaster")
+```
+
+Roller coaster with noisy survey:
+
+```{r, fig.asp=1.3}
+catches <- sin(2 * pi * seq(-1, 1, length.out = 100)) * 20 + 70
+fit_sp(catches, title = "Roller coaster", sigma = 0.8)
+fit_sp(catches, title = "Roller coaster", sigma = 0.8)
+fit_sp(catches, title = "Roller coaster", sigma = 0.8)
+```
+
+# Do it in Stan
+
+```{txt, code=readLines('schaefer_log.stan')}
+```
+
+```{r, stan-fit, warning=FALSE, message=FALSE}
+library(cmdstanr)
+
+catches <- c(seq(0, 96, length.out = 50), seq(96, 0, length.out = 50))
+K <- 1000
+r <- 0.3
+q <- 0.2
+sigma <- 0.2
+
+set.seed(1)
+sim_dat <- sim_schaefer(K = K, r = r, q = q, sigma = sigma, N = length(catches), C = catches)
+par(mfrow = c(1, 1))
+plot(sim_dat$catch, type = "o", ylab = "Catch", xlab = "Year")
+
+dat <- list(
+  C = sim_dat$catch,
+  log_Uobs = log(sim_dat$index),
+  init_depletion = 1,
+  log_K_mean = log(K),
+  log_q_mean = log(q),
+  log_r_mean = log(r),
+  log_K_sd = 2,
+  log_q_sd = 1,
+  log_r_sd = 1,
+  N = length(sim_dat$catch)
+)
+
+init <- lapply(seq_len(4), function(i) {
+  list(
+    log_K = rnorm(1, log(K), 0.5), sigma = rlnorm(1, log(sigma), 0.1),
+    log_q = rnorm(1, log(q), 0.5), log_r = rnorm(1, log(r), 0.5)
+  )
+})
+
+mod <- cmdstan_model("schaefer_log.stan")
+fit <- mod$sample(
+  data = dat, init = init, parallel_chains = 4L,
+  iter_sampling = 2000, iter_warmup = 1000, chains = 4, seed = 123,
+  adapt_delta = 0.99, max_treedepth = 15L
+)
+fit$cmdstan_diagnose()
+stanfit <- rstan::read_stan_csv(fit$output_files())
+```
+
+```{r}
+print(stanfit, pars = c("log_K", "log_q", "log_r", "sigma"))
+pairs(stanfit, pars = c("log_K", "log_q", "log_r", "sigma"))
+p <- rstan::extract(stanfit)
+par(mfrow = c(2, 2))
+hist(exp(p$log_K));abline(v = K, col = "red", lwd = 1.5)
+hist(exp(p$log_q));abline(v = q, col = "red", lwd = 1.5)
+hist(exp(p$log_r));abline(v = r, col = "red", lwd = 1.5)
+hist(p$sigma);abline(v = sigma, col = "red", lwd = 1.5)
+```
