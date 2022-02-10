@@ -436,28 +436,28 @@ fit <- mod$sample(
     #> Chain 1 Iteration:    1 / 3000 [  0%]  (Warmup) 
     #> Chain 2 Iteration:    1 / 3000 [  0%]  (Warmup) 
     #> Chain 3 Iteration:    1 / 3000 [  0%]  (Warmup) 
+    #> Chain 3 Iteration:  100 / 3000 [  3%]  (Warmup) 
     #> Chain 4 Iteration:    1 / 3000 [  0%]  (Warmup) 
     #> Chain 4 Iteration:  100 / 3000 [  3%]  (Warmup) 
     #> Chain 1 Iteration:  100 / 3000 [  3%]  (Warmup) 
     #> Chain 2 Iteration:  100 / 3000 [  3%]  (Warmup) 
-    #> Chain 3 Iteration:  100 / 3000 [  3%]  (Warmup) 
-    #> Chain 4 Iteration:  200 / 3000 [  6%]  (Warmup) 
     #> Chain 1 Iteration:  200 / 3000 [  6%]  (Warmup) 
-    #> Chain 2 Iteration:  200 / 3000 [  6%]  (Warmup) 
     #> Chain 3 Iteration:  200 / 3000 [  6%]  (Warmup) 
+    #> Chain 4 Iteration:  200 / 3000 [  6%]  (Warmup) 
+    #> Chain 2 Iteration:  200 / 3000 [  6%]  (Warmup) 
     #> Chain 1 Iteration:  300 / 3000 [ 10%]  (Warmup) 
     #> Chain 4 Iteration:  300 / 3000 [ 10%]  (Warmup) 
     #> Chain 1 Iteration:  400 / 3000 [ 13%]  (Warmup) 
     #> Chain 2 Iteration:  300 / 3000 [ 10%]  (Warmup) 
-    #> Chain 4 Iteration:  400 / 3000 [ 13%]  (Warmup) 
     #> Chain 3 Iteration:  300 / 3000 [ 10%]  (Warmup) 
+    #> Chain 4 Iteration:  400 / 3000 [ 13%]  (Warmup) 
     #> Chain 2 Iteration:  400 / 3000 [ 13%]  (Warmup) 
     #> Chain 3 Iteration:  400 / 3000 [ 13%]  (Warmup) 
-    #> Chain 4 Iteration:  500 / 3000 [ 16%]  (Warmup) 
     #> Chain 1 Iteration:  500 / 3000 [ 16%]  (Warmup) 
+    #> Chain 4 Iteration:  500 / 3000 [ 16%]  (Warmup) 
     #> Chain 2 Iteration:  500 / 3000 [ 16%]  (Warmup) 
-    #> Chain 4 Iteration:  600 / 3000 [ 20%]  (Warmup) 
     #> Chain 1 Iteration:  600 / 3000 [ 20%]  (Warmup) 
+    #> Chain 4 Iteration:  600 / 3000 [ 20%]  (Warmup) 
     #> Chain 2 Iteration:  600 / 3000 [ 20%]  (Warmup) 
     #> Chain 3 Iteration:  500 / 3000 [ 16%]  (Warmup) 
     #> Chain 4 Iteration:  700 / 3000 [ 23%]  (Warmup) 
@@ -483,9 +483,9 @@ fit <- mod$sample(
     #> Chain 1 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
     #> Chain 3 Iteration: 1000 / 3000 [ 33%]  (Warmup) 
     #> Chain 3 Iteration: 1001 / 3000 [ 33%]  (Sampling) 
-    #> Chain 2 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
     #> Chain 4 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
     #> Chain 1 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
+    #> Chain 2 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
     #> Chain 3 Iteration: 1100 / 3000 [ 36%]  (Sampling) 
     #> Chain 3 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
     #> Chain 4 Iteration: 1200 / 3000 [ 40%]  (Sampling) 
@@ -498,32 +498,32 @@ fit <- mod$sample(
     #> Chain 1 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
     #> Chain 2 Iteration: 1300 / 3000 [ 43%]  (Sampling) 
     #> Chain 3 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
-    #> Chain 4 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
     #> Chain 1 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+    #> Chain 4 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
     #> Chain 3 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
-    #> Chain 2 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
-    #> Chain 3 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
-    #> Chain 4 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
     #> Chain 1 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
+    #> Chain 3 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
+    #> Chain 2 Iteration: 1400 / 3000 [ 46%]  (Sampling) 
+    #> Chain 4 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
     #> Chain 1 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
     #> Chain 3 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
-    #> Chain 2 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
+    #> Chain 3 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
     #> Chain 4 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
     #> Chain 1 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
-    #> Chain 3 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
+    #> Chain 2 Iteration: 1500 / 3000 [ 50%]  (Sampling) 
     #> Chain 3 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
-    #> Chain 4 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
     #> Chain 1 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
     #> Chain 2 Iteration: 1600 / 3000 [ 53%]  (Sampling) 
+    #> Chain 4 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
     #> Chain 3 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
     #> Chain 1 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
     #> Chain 4 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
-    #> Chain 3 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
     #> Chain 1 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
+    #> Chain 3 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
     #> Chain 2 Iteration: 1700 / 3000 [ 56%]  (Sampling) 
     #> Chain 3 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
-    #> Chain 4 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
     #> Chain 1 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
+    #> Chain 4 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
     #> Chain 3 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
     #> Chain 1 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
     #> Chain 2 Iteration: 1800 / 3000 [ 60%]  (Sampling) 
@@ -533,20 +533,20 @@ fit <- mod$sample(
     #> Chain 2 Iteration: 1900 / 3000 [ 63%]  (Sampling) 
     #> Chain 3 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
     #> Chain 1 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
-    #> Chain 4 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
     #> Chain 3 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
+    #> Chain 4 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
     #> Chain 1 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
     #> Chain 2 Iteration: 2000 / 3000 [ 66%]  (Sampling) 
     #> Chain 3 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
-    #> Chain 4 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
     #> Chain 1 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
+    #> Chain 4 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
     #> Chain 3 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
     #> Chain 1 Iteration: 3000 / 3000 [100%]  (Sampling) 
     #> Chain 2 Iteration: 2100 / 3000 [ 70%]  (Sampling) 
     #> Chain 4 Iteration: 2300 / 3000 [ 76%]  (Sampling) 
-    #> Chain 1 finished in 6.2 seconds.
+    #> Chain 1 finished in 6.1 seconds.
     #> Chain 3 Iteration: 3000 / 3000 [100%]  (Sampling) 
-    #> Chain 3 finished in 6.2 seconds.
+    #> Chain 3 finished in 6.1 seconds.
     #> Chain 4 Iteration: 2400 / 3000 [ 80%]  (Sampling) 
     #> Chain 2 Iteration: 2200 / 3000 [ 73%]  (Sampling) 
     #> Chain 4 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
@@ -556,8 +556,8 @@ fit <- mod$sample(
     #> Chain 4 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
     #> Chain 2 Iteration: 2500 / 3000 [ 83%]  (Sampling) 
     #> Chain 4 Iteration: 2800 / 3000 [ 93%]  (Sampling) 
-    #> Chain 4 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
     #> Chain 2 Iteration: 2600 / 3000 [ 86%]  (Sampling) 
+    #> Chain 4 Iteration: 2900 / 3000 [ 96%]  (Sampling) 
     #> Chain 4 Iteration: 3000 / 3000 [100%]  (Sampling) 
     #> Chain 4 finished in 8.0 seconds.
     #> Chain 2 Iteration: 2700 / 3000 [ 90%]  (Sampling) 
@@ -567,10 +567,10 @@ fit <- mod$sample(
     #> Chain 2 finished in 9.2 seconds.
     #> 
     #> All 4 chains finished successfully.
-    #> Mean chain execution time: 7.4 seconds.
-    #> Total execution time: 9.4 seconds.
+    #> Mean chain execution time: 7.3 seconds.
+    #> Total execution time: 9.3 seconds.
     fit$cmdstan_diagnose()
-    #> Processing csv files: /var/folders/h5/j1fmxy1n7cz6sl653t515qqr0000gn/T/RtmpdtRsy9/schaefer_log-202202101343-1-3a412c.csv, /var/folders/h5/j1fmxy1n7cz6sl653t515qqr0000gn/T/RtmpdtRsy9/schaefer_log-202202101343-2-3a412c.csv, /var/folders/h5/j1fmxy1n7cz6sl653t515qqr0000gn/T/RtmpdtRsy9/schaefer_log-202202101343-3-3a412c.csv, /var/folders/h5/j1fmxy1n7cz6sl653t515qqr0000gn/T/RtmpdtRsy9/schaefer_log-202202101343-4-3a412c.csv
+    #> Processing csv files: /var/folders/h5/j1fmxy1n7cz6sl653t515qqr0000gn/T/RtmptwhCji/schaefer_log-202202101346-1-3a429a.csv, /var/folders/h5/j1fmxy1n7cz6sl653t515qqr0000gn/T/RtmptwhCji/schaefer_log-202202101346-2-3a429a.csv, /var/folders/h5/j1fmxy1n7cz6sl653t515qqr0000gn/T/RtmptwhCji/schaefer_log-202202101346-3-3a429a.csv, /var/folders/h5/j1fmxy1n7cz6sl653t515qqr0000gn/T/RtmptwhCji/schaefer_log-202202101346-4-3a429a.csv
     #> 
     #> Checking sampler transitions treedepth.
     #> Treedepth satisfactory for all transitions.
@@ -590,7 +590,7 @@ fit <- mod$sample(
 
 ``` r
 print(stanfit, pars = c("log_K", "log_q", "log_r", "sigma"))
-#> Inference for Stan model: schaefer_log-202202101343-1-3a412c.
+#> Inference for Stan model: schaefer_log-202202101346-1-3a429a.
 #> 4 chains, each with iter=3000; warmup=1000; thin=1; 
 #> post-warmup draws per chain=2000, total post-warmup draws=8000.
 #> 
@@ -600,7 +600,7 @@ print(stanfit, pars = c("log_K", "log_q", "log_r", "sigma"))
 #> log_r -1.30       0 0.11 -1.52 -1.38 -1.30 -1.23 -1.09  1620    1
 #> sigma  0.18       0 0.01  0.16  0.17  0.18  0.19  0.21  2375    1
 #> 
-#> Samples were drawn using NUTS(diag_e) at Thu Feb 10 13:43:56 2022.
+#> Samples were drawn using NUTS(diag_e) at Thu Feb 10 13:46:12 2022.
 #> For each parameter, n_eff is a crude measure of effective sample size,
 #> and Rhat is the potential scale reduction factor on split chains (at 
 #> convergence, Rhat=1).
