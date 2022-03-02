@@ -106,3 +106,26 @@ hist(exp(p$log_r));abline(v = r, col = "red", lwd = 1.5)
 hist(p$sigma_obs);abline(v = sigma_obs, col = "red", lwd = 1.5)
 hist(p$sigma_pro);abline(v = sigma_pro, col = "red", lwd = 1.5)
 ```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+med <- apply(p$log_U, 2, median)
+upr <- apply(p$log_U, 2, quantile, probs = 0.9)
+lwr <- apply(p$log_U, 2, quantile, probs = 0.1)
+data.frame(year = 1:100, med, lwr, upr, index = sim_dat$index) %>%
+  ggplot(aes(year, exp(med))) + geom_line() +
+  geom_point(aes(y = index), col = "blue") +
+  geom_ribbon(aes(ymin = exp(lwr), ymax = exp(upr)), alpha = 0.2) +
+  theme_minimal() + ggtitle("Index fit (grey) to index data (blue)")
+
+med <- apply(p$B, 2, median)
+upr <- apply(p$B, 2, quantile, probs = 0.9)
+lwr <- apply(p$B, 2, quantile, probs = 0.1)
+data.frame(year = 1:100, med, lwr, upr, true_B = sim_dat$B, index = sim_dat$index) %>%
+  ggplot(aes(year, med)) + geom_line() +
+  geom_point(aes(y = true_B), col = "blue") +
+  geom_ribbon(aes(ymin = lwr, ymax = upr), alpha = 0.2) +
+  theme_minimal() +
+  ggtitle("Estimated biomass (grey) compared to known truth (blue)")
+```
