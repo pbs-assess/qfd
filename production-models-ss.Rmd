@@ -46,17 +46,18 @@ plot(sim_dat$B, type = "o")
 ```{r, stan-fit, warning=FALSE, message=FALSE}
 library(cmdstanr)
 
-catches <- sin(2 * pi * seq(-1, 1, length.out = 100)) * 20 + 30
+catches <- sin(1.5 * pi * seq(-1, 1, length.out = 100)) * 30 + 40
 plot(catches)
 K <- 1000
-r <- 0.3
+r <- 0.25
 q <- 0.1
-sigma_pro <- 0.2
-sigma_obs <- 0.2
+sigma_pro <- 0.1
+sigma_obs <- 0.1
 
-set.seed(99)
+set.seed(123)
 sim_dat <- sim_schaefer(K = K, r = r, q = q, sigma_pro = sigma_pro, sigma_obs = sigma_obs,
   N = length(catches), C = catches)
+par(mfrow = c(1, 1))
 plot(sim_dat$index, type = "o")
 par(mfrow = c(1, 1))
 plot(sim_dat$catch, type = "o", ylab = "Catch", xlab = "Year")
@@ -87,7 +88,7 @@ init <- lapply(seq_len(4), function(i) {
 mod <- cmdstan_model("schaefer_ss_log.stan")
 fit <- mod$sample(
   data = dat, init = init, parallel_chains = 4L,
-  iter_sampling = 500L, iter_warmup = 500L, chains = 4L, seed = 123,
+  iter_sampling = 1000L, iter_warmup = 1000L, chains = 4L, seed = 123,
   adapt_delta = 0.9999, max_treedepth = 13L
 )
 fit$cmdstan_diagnose()
