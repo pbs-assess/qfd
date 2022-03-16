@@ -31,7 +31,8 @@ plot(B, type = "l", sapply(1:100, function(x) fletcher(x, 100, 60)), ylab = "Pro
 **m* in Q&D is sub notation meaning maximum, but also units? See Eq 2.5 and following text.  
 *If $m = 60$ in the equation above, and Q&D call this the maximum, why is the peak at 50?
 
-Now the Pella-Tomlinson independent of catch. With *m* = 2 so it should look like above.
+Now the Pella-Tomlinson independent of catch. With *m* = 2 so it should look like above.  
+*could be cool to write this to take multiple m*
 ```{r}
 PelTom <- function(B, r, k, m) {
   (r*B) - ((r/k)*B^m)
@@ -75,5 +76,4 @@ plot(Pdotm1, type = "l", ylab = "Rate (1/t)", xlab = "B (biomass)", col = "blue"
 lines(B, Pdotm2, col = "black")
 lines(B, Pdotm3, col = "red")
 abline(h = 0)
-
 ```
