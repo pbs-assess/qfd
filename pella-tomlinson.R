@@ -10,6 +10,7 @@ pt_hw <- function(B, r, k, m) {
 }
 
 # https://www.sciencedirect.com/science/article/abs/pii/S0304380015002732
+# https://tinyurl.com/yuvhtvjt
 pt2 <- function(B, r, n, K) {
   (r / n) * B * (1 - (B / K)^n)
 }
