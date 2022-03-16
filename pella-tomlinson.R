@@ -1,7 +1,7 @@
 # Fletcher, Q&D:
 pt <- function(B, m, Binf, n) {
-  gamma <- n ^(n / (n - 1)) / (n - 1)
-  gamma * m * (B/Binf) - gamma * m * (B / Binf)^n
+  gamma <- n^(n / (n - 1)) / (n - 1)
+  gamma * m * (B / Binf) - gamma * m * (B / Binf)^n
 }
 
 # H&W 8.4.4:
@@ -33,8 +33,14 @@ lines(B, sapply(B, function(x) pt_hw(B = x, r = 0.2, k = 100, m = 1.90)), type =
 plot(1:100, sapply(1:100, function(x) pt2(B = x, r = 0.5, K = 100, n = 2)), type = "l", col = "black")
 lines(1:100, sapply(1:100, function(x) pt2(B = x, r = 0.32, K = 100, n = 0.5)), type = "l", col = "black")
 # :(
+# (correct but different definition of 'n')
+# i.e., need to do this:
+# note the need to change 'r' compared to Fletcher
+
+plot(1:100, sapply(1:100, function(x) pt2(B = x, r = 0.5, K = 100, n = 1)), type = "l", col = "black")
+lines(1:100, sapply(1:100, function(x) pt2(B = x, r = 0.25, K = 100, n = -0.5)), type = "l", col = "black")
 
 plot(1:100, sapply(1:100, function(x) pt3(B = x, r = 0.5, K = 100, n = 2)), type = "l", col = "black")
 lines(1:100, sapply(1:100, function(x) pt3(B = x, r = 0.25, K = 100, n = 0.5)), type = "l", col = "black")
 # :)
-# note the need to change 'r'
+# note the need to change 'r' compared to Fletcher
