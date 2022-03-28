@@ -125,13 +125,42 @@ plot(R_DS~S, main = paste("Deriso-Schnute(alpha=", alpha, "beta=", beta, "gamma=
 #### Figure 3.5  
 - Hmmm, need to pick better numbers?
 ```{r, 3.5}
-plot((alpha*S*(1-(beta*1*S))^(1/1))~S, main = "cushing with different gammas")
+plot((alpha*S*(1-(beta*1*S))^(1/1))~S, main = "Deriso-Schnute with different gammas")
 lines((alpha*S*(1-(beta*-1*S))^(1/-1))~S)
 lines((alpha*S*(1-(beta*0*S))^(1/0))~S)
 ```
   
 ### Shepard
 When `gamma <- 1` you have a Beverton-Holt, when `gamma > 1` a dome shaped SR curve, and when `gamma < 1` a curve that increases indefinitely like the Cushing.   
+Derived by making considerations between recruitment and growth, where DD is inversely proportional to resultant growth, and growth is a DD funciton of the number of eggs.  
 ```{r, Shepard}
+R_Shep <- alpha*S/(1+(beta*S^gamma))
 
+plot(R_Shep~S, )
 ```
+  
+### Gamma  
+*unnormalized* (wtf?) gamma function. Similar flexibility to the Deriso_Schnute, but the asymptotic behavior of the Beverton-Holt not completely captured. When `gamma . 0` it's dome shaped like a Ricker, and is a Ricker when `gamma <- 1`. It's a Cushing when `beta <- 0`, and behaves like a Beverton-Holt as `gamma` approaches 0. When `gamma <= 0` it isn't a proper SR model because it doesn't go through the origin (Reish et al, 1985).  
+- *again* why show those 2 parameterizations like the Cushing in eq 3.22?  
+```{r, gamma}
+R_Gamma <- (alpha*S^gamma)*exp(-beta*S)
+
+plot(R_Gamma~S)
+```
+
+## Depensatory models  
+So far only the Gamma SR model has any depensation in it. We can modify the B-H and Ricker to include a term for depensation.  
+```{r, depensaiton}
+R_dep_R <- alpha*S^gamma/(1+(beta*S^gamma))
+
+plot(R_dep_R ~S, main = "depensatory B-H")
+
+delta <- 2
+R_dep_BH <- alpha*S*exp((beta*S) - (delta*S^gamma))
+
+plot(R_dep_BH~S, main = "depensatory Ricker")
+```
+  
+It's really hard to see the depensation in these, so we'll try another exercise leftover from a class Chris Cahill and John Post taught me (Dylan) back in 2018 or something...   
+
+## Denensatory recruitment exercise
