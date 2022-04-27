@@ -170,9 +170,9 @@ This Beverton-Holt with depensation, `delta`, follows a form from [Myers et al, 
 We'll set the parameters here. Some are log-transformed to ease in estimation later.  
 ```{r, call parms}
 S <- 0:1000 #spawners
-alpha <- .07 
+alpha <- .05 
 K <- log(7500) #K is density dependent effect 
-delta <- 1.7 #depensatory term 
+delta <- 1.9 #depensatory term 
 r_sd <- log(20) #sd for sims
 
 MinStock <- c(0, 150, 300, 600) #how far down are you allowed to fish the stock? 
