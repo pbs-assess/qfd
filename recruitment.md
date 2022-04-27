@@ -311,16 +311,15 @@ Now we’ll build a likelihood.
 ``` r
 parms <- c(alpha, K, r_sd, delta) 
 
-getNegLogLike <- function(parms){
+getNegLogLike <- function(parms, mod_type){
   alpha  <- parms[1] #unpack parms
   K <- exp(parms[2])
   r_sd  <- exp(parms[3]) 
-  if(length(parms>3)){
-      delta  <- parms[4]
-  } else{
-    delta <- 1
-  }
-  predicted <- (alpha*S^delta)/(1+(S^delta/K)) 
+  
+  if(mod_type == "depensatory"){delta <- parms[4]
+  predicted <- (alpha*S^delta)/(1+(S^delta/K))}
+  
+  if(mod_type == "classic"){predicted <- (alpha*S)/(1+(S/K))}
   NegLogLike <- -sum(log(dnorm(observed, predicted, sd=r_sd))) #calculate NLL
   return(NegLogLike)
 }
@@ -333,11 +332,12 @@ harvest.
 want to make sure `optim` isn’t trying to guess `delta`
 
 ``` r
-NSim <- 1000
+NSim <- 100
 NSamps <- 100
 #build empty array(rows=sims, cols=parms, pages=fits, books=stock levels)
-answers <- array(NA, dim=c(NSim, 4, 2, 4)) 
+#answers <- array(NA, dim=c(NSim, 4, 2, 4)) 
 
+answers <- NULL #switch to this way because I can't remember how to index arrays properly
 #values to be estimated, just going to use true values for ease of fit 
 alpha_e <- alpha
 K_e <- K   
@@ -347,34 +347,44 @@ r_sd_e <- r_sd
 dep_parms  <- c(alpha_e, K_e, r_sd_e, delta_e) 
 classic_parms  <- c(alpha_e, K_e, r_sd_e)
 
-if(FALSE){ #turning this off for now because it's busted. 
 
 #loop some sims 
-for(k in length(MinStock)){ #loop min stock sizes
+for(k in 1:length(MinStock)){ #loop min stock sizes
   for(j in 1:2){ #loop methods
-    if(j==1){parms<-dep_parms} 
-    if(j==2){parms<-classic_parms
-    delta <- 1}
+    if(j==1){parms <- dep_parms
+    mod_type <- "depensatory"} 
+    if(j==2){parms <- classic_parms
+    mod_type <- "classic"}
     for(i in 1:NSim){
       #make vectors of observed and predicted
-      SimStock <- sample(MinStock[k]:1000, NSamps, replace=TRUE)
+      SimStock <- sample(MinStock[k]:NSim, NSamps, replace=TRUE)
 
       predicted <- (alpha*SimStock^delta)/(1+(SimStock^delta/exp(K)))
       observed  <- predicted + rnorm(length(predicted), mean=0, exp(r_sd)) 
   
       #fit it
-      fit <- optim(parms, getNegLogLike, method="Nelder-Mead", hessian=T)
-  
-  #print results and account for uneven # of parms
-  if(length(fit$par)==dim(answers)[2]){answers[i, ,j,k] <- fit$par} 
-  else {answers[i, 1:3 ,j,k] <- fit$par} 
+      fit <- optim(parms, getNegLogLike, method="Nelder-Mead", hessian=T, mod_type = mod_type)
+      
+      #pretty crap way to write it all down
+       if(j == 1){sub_answers <- data.frame(method = "depensatory", min_stock = MinStock[k], 
+                                        alpha = fit$par[1], K = fit$par[2], 
+                                        log_r_sd = fit$par[3], delta = fit$par[4])} 
+  else{sub_answers <- data.frame(method = "classic", min_stock = MinStock[k], 
+                                        alpha = fit$par[1], K = fit$par[2], 
+                                        log_r_sd = fit$par[3], delta = NA)} 
+      
+  answers <- bind_rows(sub_answers, answers)
+      
     }
   }
 }
+#plot it
+answers_plot <- answers %>%
+  pivot_longer(alpha:delta, names_to = "parm") 
 
-str(answers)
-colnames(answers) <- c("alpha", "log_K", "log_r_sd", "delta") #some names for parms
-head(answers[,,1,1])#checking it's all populated
-
-} #close chunk turning it off. 
+ggplot(answers_plot) +
+  geom_violin(aes(as.factor(min_stock), value)) +
+  facet_grid(parm ~ method, scales = "free")
 ```
+
+![](recruitment_files/figure-gfm/sim-1.png)<!-- -->
